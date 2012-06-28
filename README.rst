@@ -28,3 +28,11 @@ Usage
     TweetGrab for saktidc, remaining limit 346
 
     $ view saktidc_rel.csv
+
+
+Next Milestones
+---------------
+
+- Add all basic information for twitter account not only followers
+- Task can be distributed into multiple host
+- Using a database system
