@@ -34,5 +34,5 @@ Next Milestones
 ---------------
 
 - Add all basic information for twitter account not only followers
-- Task can be distributed into multiple host
+- Task can be distributed into multiple host (using zerorpc)
 - Using a database system
