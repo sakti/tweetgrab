@@ -1,6 +1,8 @@
 import twitter
 import os
 from urllib2 import URLError
+import json
+import sys
 
 TWITTER_CREDS = os.path.expanduser('~/.tweetgrabgraphcreds')
 
@@ -33,6 +35,10 @@ class TweetGrab(object):
         # default starting cursor is -1
         self._cursor = -1
         self.id = self.tw.users.lookup(screen_name=screen_name)[0]['id']
+
+    def info(self):
+        userinfo = self.tw.users.show(screen_name=self.screen_name)
+        return json.dumps(userinfo, indent=4)
 
     def __repr__(self):
         return "TweetGrab for %s" % self.screen_name
@@ -98,8 +104,15 @@ if __name__ == '__main__':
         get_oauth()
         auth = create_oauth()
 
+    if len(sys.argv) == 2:
+        twt_obj = TweetGrab(sys.argv[1], auth=auth)
+        print twt_obj.info()
+        sys.exit(0)
+
     screen_name = raw_input('Target user screen name : ')
     twt_obj = TweetGrab(screen_name, auth=auth)
+    import pdb
+    pdb.set_trace()
     print("fetching followers")
     twt_obj.get_follower()
     print("saving relationship to file")
