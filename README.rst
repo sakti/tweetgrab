@@ -139,6 +139,7 @@ Fetch user info (json format)
     "profile_sidebar_border_color": "EEEEEE", 
     "default_profile": false, 
     "following": false
+    }
 
 
 Next Milestones
