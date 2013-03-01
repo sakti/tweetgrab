@@ -3,11 +3,40 @@ import os
 from urllib2 import URLError
 import json
 import sys
+import argparse
+
 
 TWITTER_CREDS = os.path.expanduser('~/.tweetgrabgraphcreds')
 
 CONSUMER_KEY = 'xtKjs9wudlHoA21qf0A'
 CONSUMER_SECRET = '9GCetczwvsfuyYkYZJofFyPg022d9Ld3aoEu46ABQ'
+
+__version__ = 0.1
+
+parser = argparse.ArgumentParser(
+        prog='tweetgrab.py',
+        description='Twitter Grabber'
+    )
+parser.add_argument('-oa', '--oauth',
+        action='store_true',
+        default=False,
+        help='use oauth authentication'
+    )
+parser.add_argument('-u', '--user',
+        action='store',
+        help='user screen_name to lookup',
+        required=True
+    )
+
+parser.add_argument('-c', '--command',
+        action='store',
+        help='command to run [info, rel]',
+        required=True
+    )
+parser.add_argument('-v', '--version',
+        action='version',
+        version=__version__
+    )
 
 
 def get_oauth():
@@ -90,32 +119,22 @@ class TweetGrab(object):
 
 
 if __name__ == '__main__':
-    using_oauth = False
-    while True:
-        answer = raw_input('Use OAuth (y/n)? ')
-        if answer == 'y':
-            using_oauth = True
-            break
-        elif answer == 'n':
-            break
-
+    args = parser.parse_args()
+    
     auth = None
-    if using_oauth:
+
+    if args.oauth:
         get_oauth()
         auth = create_oauth()
 
-    if len(sys.argv) == 2:
-        twt_obj = TweetGrab(sys.argv[1], auth=auth)
+    if args.command == 'info':
+        twt_obj = TweetGrab(args.user, auth=auth)
         print twt_obj.info()
-        sys.exit(0)
-
-    screen_name = raw_input('Target user screen name : ')
-    twt_obj = TweetGrab(screen_name, auth=auth)
-    import pdb
-    pdb.set_trace()
-    print("fetching followers")
-    twt_obj.get_follower()
-    print("saving relationship to file")
-    twt_obj.save()
-    print("Done.")
-    print twt_obj
+    elif args.command == 'rel':
+        twt_obj = TweetGrab(args.user, auth=auth)
+        print("fetching followers")
+        twt_obj.get_follower()
+        print("saving relationship to file")
+        twt_obj.save()
+        print("Done.")
+        print twt_obj
