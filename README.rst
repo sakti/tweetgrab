@@ -17,13 +17,26 @@ Requirements
 Usage
 -----
 
+::
+
+    usage: tweetgrab.py [-h] [-oa] -u USER -c COMMAND [-v]
+
+    Twitter Grabber
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -oa, --oauth          use oauth authentication
+      -u USER, --user USER  user screen_name to lookup
+      -c COMMAND, --command COMMAND
+                            command to run [info, rel]
+      -v, --version         show program's version number and exit
+    
+
 Get user relationship list (csv format)
 
 ::
 
-    $ python tweetgrab.py
-    Use OAuth (y/n)? y
-    Target user screen name : saktidc
+    $ python tweetgrab.py -oa -u saktidc -c rel
     fetching followers
     saving relationship to file
     Done.
@@ -35,8 +48,7 @@ Fetch user info (json format)
 
 ::
 
-    $ python tweetgrab.py saktidc
-    Use OAuth (y/n)? y
+    $ python tweetgrab.py -u saktidc -c info
     {
     "follow_request_sent": false, 
     "profile_use_background_image": true, 
