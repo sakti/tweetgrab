@@ -2,8 +2,8 @@ import twitter
 import os
 from urllib2 import URLError
 import json
-import sys
 import argparse
+from getpass import getpass
 
 
 TWITTER_CREDS = os.path.expanduser('~/.tweetgrabgraphcreds')
@@ -55,10 +55,7 @@ def create_oauth():
 
 class TweetGrab(object):
     def __init__(self, screen_name, auth=None):
-        if auth:
-            self.tw = twitter.Twitter(auth=auth)
-        else:
-            self.tw = twitter.Twitter()
+        self.tw = twitter.Twitter(auth=auth)
         self.screen_name = screen_name
         self.follower = []
         # default starting cursor is -1
@@ -120,12 +117,17 @@ class TweetGrab(object):
 
 if __name__ == '__main__':
     args = parser.parse_args()
-    
-    auth = None
+    auth = twitter.NoAuth()
 
     if args.oauth:
         get_oauth()
         auth = create_oauth()
+    else:
+        username = raw_input('username: ')
+        password = getpass('password: ')
+        auth = twitter.UserPassAuth(username, password)
+
+    print auth
 
     if args.command == 'info':
         twt_obj = TweetGrab(args.user, auth=auth)
